@@ -1,0 +1,11 @@
+INCONCISTENCIAS
+Errores de ESPACIADO: 13
+COMA sin espacio adelante: 0
+COMA con espacio atras: 0
+PUNTO sin espacio adelante: 0
+PUNTO con espacio atras: 0
+PUNTO Y COMA sin espacio adelante: 0
+PUNTO Y COMA con espacio atras: 0
+Signos de pregunta: 0
+Signos de exclamacion: 0
+Parentesis: 0
