@@ -1,10 +1,7 @@
 #!/bin/bash
 
-awk -f "parse_notes.awk" $2 > pepito.json
-# for file in "$2/*"; do
-    
-# done
+for file in "$2/*"; do
+    awk -f "parse_notes.awk" $file 
+done > finales_semanales_temp.csv
 
-# for file in "$2/*"; do
-#     awk -f to_json.awk $file
-# done > pepito.json
+awk -f "to_json.awk" finales_semanales_temp.csv > pepito.json
