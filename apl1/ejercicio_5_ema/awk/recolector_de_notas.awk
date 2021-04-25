@@ -10,6 +10,13 @@ function calculate_score(data){
     return sum
 }
 
+function get_cod_materia(filename){
+    path_length=split(filename, splited_path, "/")
+    split(splited_path[path_length], splited_filename, "_")
+    
+    return splited_filename[1]
+}
+
 BEGIN	{
     FS=","
     score_value["b"]=1
@@ -19,7 +26,7 @@ BEGIN	{
 
 {   
     cantidad_notas_por_dni[$1]++
-    actas[$1, "materia", cantidad_notas_por_dni[$1]]=FILENAME
+    actas[$1, "materia", cantidad_notas_por_dni[$1]]=get_cod_materia(FILENAME)
     actas[$1, "notas", cantidad_notas_por_dni[$1]]=calculate_score($0)
 }
 

@@ -1,7 +1,4 @@
 #!/bin/bash
 
-for file in "$2/*"; do
-    awk -f "parse_notes.awk" $file 
-done > finales_semanales_temp.csv
-
-awk -f "to_json.awk" finales_semanales_temp.csv > pepito.json
+./sh/recolector_de_notas.sh $2
+./sh/conversor_json.sh
