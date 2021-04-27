@@ -1,6 +1,20 @@
 #!/bin/bash
 
 
+# +++++++++++++++ENCABEZADO+++++++++++++++++++++++++++
+# Nombre script: Ejercicio2.sh
+# Trabajo Práctico Nro. 1 (GRUPAL)
+# Ejercicio: 6
+# Integrantes:
+  #  Cardozo Emanuel                    35000234
+  #  Iorio Diego                        40730349
+  #  Paz Zarate Evelyn  Jessica         37039295
+  #  Perez Lucas Daniel                 39656325
+  #  Ramos Marcos                       35896637
+# Nro entrega: Primera Entrega
+# +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
+
+
 mostrarAyuda(){
     echo "Descripcion: ..........."
     echo "El Script moverá elementos a la Papelera de reciclaje. "
@@ -71,7 +85,6 @@ vaciarPapelera(){
 }
 
 enviarFicheroAPapelera(){
-    
     if [[ -f $1 ]]; then
         descomprimirPapelera
         lista="$PATH_PAPELERA/ListadoDeArchivosEnLaPapelera.txt"
@@ -118,16 +131,12 @@ restaurarFichero(){
     #se verifica que hayan archivos en la papelera y se busca el nombre ingresado por parametro
     if [[ $(cat "$listaArchivos" | wc -l) > 0 ]]; then
         listaConPath=`awk 'BEGIN{FS=":"} {print $3 $2}' $listaArchivos`
+        
         if [[ "$1" == *"/"* ]]; then #identifico si incluye el path
-            for linea in ${listaConPath[@]} 
-            do
-                if [[ "$1" == "$linea" ]]; then
-                    listadoAMostrar+=($1)
-                fi
-            done
+            echo "Ingrese solo el nombre del archivo"
+            exit 1
         
         else 
-            indicesRutas=0
             indice=0
             for linea in ${listaConPath[@]} 
             do
@@ -136,7 +145,7 @@ restaurarFichero(){
                     ruta="${linea%/*}/"
                     nombre="${linea##*/}"                   
                 fi
-                    
+
                 if [[ "$1" == "$nombre" ]]; then
                     listadoAMostrar+=("$indice - nombre: $nombre - ruta: $ruta")
                 fi
@@ -144,24 +153,21 @@ restaurarFichero(){
             #si hay mas de un archivo con el mismo nombre preguntar cual se quiere borrar
             if [[ ${#listadoAMostrar[*]} > 1 ]]; then
                 echo " Cual archivo quiere restaurar?"
-                echo "$listadoAMostrar"
+                echo ${listadoAMostrar[*]}
                 read valor 
-                if [[ $valor =~ "^[0-9]+$" ]]; then
-                    for m in ${listadoAMostrar[@]} 
-                    do
-                        if [[ "$valor-" == "$m-"* ]]; then
-                        #restaurar archivo
-                        ruta="${listadoAMostrar% '- ruta: '*}"
-                        echo $ruta
-                        mv "$PATH_PAPELERA/Archivos/$valor" "$ruta/$1" 
-                        sed -i "$ruta d" $listaArchivos
-                        fi
-                    done
-
-                fi
+                valor="$((valor-1))"
+               
+                ruta="${listadoAMostrar[$valor]##*'- ruta: '}"
+                id="${listadoAMostrar[$valor]%' - nombre:'*}"
+                
+                #restaurar archivo
+                mv "$PATH_PAPELERA/Archivos/$id" "$ruta$1"
+                sed -i "$id d" "$listaArchivos"
+                                
             elif [[ ${#listadoAMostrar[*]} == 1  ]]; then
                 ruta="${listadoAMostrar##*'- ruta: '}"
                 id="${listadoAMostrar%' - nombre:'*}"
+                
                 #restaurar archivo
                 mv "$PATH_PAPELERA/Archivos/$id" "$ruta$1"
                 sed -i "$id d" "$listaArchivos"
@@ -189,11 +195,15 @@ restaurarFichero(){
 }
 
 #se verifica que no hayan parametros de mas
-if test $# -lt 2; then
-    if test "$1" == "-r"; then 
+if test $# -lt 3; then
+    if test "$1" == "-r" && test $# -lt 2 ; then 
         mostrarAyuda
         exit 1
     fi
+else 
+    mostrarAyuda
+    exit 1
+
 fi
 
 
@@ -213,7 +223,7 @@ while getopts hler: option; do
             ;;
     esac
 done
-echo $RECUPERAR
+
 if test $HELP -eq 1; then
     mostrarAyuda
     exit 0
@@ -227,11 +237,10 @@ elif test $VACIAR -eq 1; then
     exit 0
 
 elif test "$RECUPERAR" == "$2"; then
-    restaurarFichero $2
+    restaurarFichero "$2"
     exit 0
 
 else 
-    enviarFicheroAPapelera $1
+    enviarFicheroAPapelera "$1"
     exit 0
 fi
-
