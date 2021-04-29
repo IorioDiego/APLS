@@ -1,0 +1,21 @@
+{ "actas": [
+	{
+		"dni": "12345678",
+		"notas": [
+			{ "materia": 1115, "nota": 7 },
+			{ "materia": 1116, "nota": 8 },
+		]
+	},
+	{
+		"dni": "11111111",
+		"notas": [
+			{ "materia": 1116, "nota": 6 },
+		]
+	},
+	{
+		"dni": "87654321",
+		"notas": [
+			{ "materia": 1115, "nota": 8 }
+		]
+	}
+] }
