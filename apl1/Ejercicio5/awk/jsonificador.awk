@@ -10,7 +10,7 @@ BEGIN	{
     for(i=2; i<NF; i+=2){
         printf "\t\t\t{ \"materia\": %s, \"nota\": %s }", $i, $(i+1)
         
-        if((i+1)!=NF){
+        if((i+1)<NF){
             printf ",\n"
         } else {
             printf "\n"

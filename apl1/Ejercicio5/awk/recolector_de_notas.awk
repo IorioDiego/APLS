@@ -39,6 +39,7 @@ END	{
         for(i=1; i<=cantidad_notas_por_dni[dni]; i++){
             materia=actas[dni, "materia", i]
             nota=actas[dni, "notas", i]
+            gsub(",",".",nota) # set decimal separator equals to .
             materia_y_nota=materia_y_nota","materia","nota
         }
         
