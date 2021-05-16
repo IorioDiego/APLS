@@ -73,20 +73,21 @@ fi
 
 if ! [ -d "$descargas" ] || ! [ -d "$destino" ] 
 then
- "Uno de los directorios de entrada no existe"
+ echo "Uno de los directorios de entrada no existe"
  exit 1
 fi 
 
 if ! [ -w $destino ]
 then
-  "La carpeta de destino no tiene permiso de escritura"
+  echo "La carpeta de destino no tiene permiso de escritura"
   exit 1
 fi
 
 if ! [ -r $descargas ]
 then
-  "La carpeta de descargas no tiene permiso de escritura"
+ echo  "La carpeta de descargas no tiene permiso de escritura"
   exit 1
 fi
  
 ./daemon.sh >& /dev/null "$descargas" "$destino" & 
+#./daemon.sh "$descargas" "$destino" &

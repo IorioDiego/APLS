@@ -21,59 +21,29 @@ while true
 do
 sleep 1
         if [[ "$oldStat" != "$newStat" ]]
-                then
-                        if [ $1 != $2 ]
+        then
+                IFS=$'\n'
+                newFiles=($(ls -1a "$1"))
+                for elem in ${newFiles[@]}
+                do
+                        echo "archivo :$elem"
+                        primerCar=$(expr substr $elem 1 1)
+                        if [ $primerCar == '.' ]
                         then
-                                IFS=$'\n'
-                                newFiles=($(ls -1a "$1"))
-                                for elem in ${newFiles[@]}
-                                do
-                                        echo "archivo :$elem"
-                                        primerCar=$(expr substr $elem 1 1)
-                                        if [ $primerCar == '.' ]
-                                        then
-                                                extension=$(echo $elem | awk -F . '{print $3}')
-                                        else
-                                                extension=$([[ "$elem" = *.* ]] && echo "${elem##*.}") 
-                                        fi
-                                        primerCar=$(expr substr $elem 1 1)
-                                                if [ -z $extension ] || ([ -z $extension ] && [ $primerCar == "." ])
-                                                then 
-                                                        mv "$1/$elem" "$2"
-                                                else
-                                                        directorio=0
-                                                        ciclos=0   
-                                                        mkdir "$2/temp"    
-                                                        destiny=($(ls -l $2 | grep ^d | awk '{print $9}'))
-                                                        
-                                                        for d in ${destiny[@]}
-                                                        do
-                                                                ciclos=$(( ciclos + 1))
-                                                                if [[ "${d,,}" == "${extension,,}" ]]
-                                                                then
-                                                                        directorio=1
-                                                                        mv "$1/$elem" "$2/$d"
-                                                                else 
-                                                                        mkdir "$2/${extension^^}"
-                                                                        mv "$1/$elem" "$2/${extension^^}"
-                                                                fi
-
-                                                                #  if [ $directorio -eq 0 ] && [ $ciclos -eq ${#destiny[@]} ] 
-                                                                #  then
-                                                                #          mkdir "$2/${extension^^}"
-                                                                #          mv "$1/$elem" "$2/${extension^^}"
-                                                                #  fi
-                                                        done
-                                                        rmdir $2/temp
-                                                fi
-                                done
+                                extension=$(echo $elem | awk -F . '{print $3}')
+                        else
+                        extension=$([[ "$elem" = *.* ]] && echo "${elem##*.}") 
                         fi
-                        oldStat=$newStat
-                        unset IFS
+                                primerCar=$(expr substr $elem 1 1)
+                                mkdir "$2/${extension^^}"
+                                mv "$1/$elem" "$2/${extension^^}"                   
+                        done
+                     
+                oldStat=$newStat
+                unset IFS
         fi
-  
- newStat=$(ls -la "$1" | wc -l)
- newStat=$(( newStat - 1))
+newStat=$(ls -la "$1" | wc -l)
+newStat=$(( newStat - 1))
 done
 
 

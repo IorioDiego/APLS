@@ -50,17 +50,9 @@ if [[ "$1" != "-in" ]]
     exit 1
 fi
 
-tipo="text/plain"
-tipoArch=$(file $2 --mime-type)
-if [[ "$tipoArch" != *$tipo*  ]]
-then
-  echo "El archivo no es de texto plano"
-  exit 0
-fi
-
 if ! [ -f "$2" ]
 then
-    echo "El archivo de entrada existe"
+    echo "El archivo de entrada no existe"
     exit 1
 fi
 
@@ -76,10 +68,24 @@ then
   exit 1  
 fi
 
+ tipo="text/plain"
+ tipoArch=$(file "$2" --mime-type)
+ if [[ "$tipoArch" != *$tipo*  ]]
+ then 
+  echo "El archivo no es de texto plano"
+   exit 1
+ fi
+
+
+# if ! [[ $(cat "$2") =~ ^.*$ ]]; then
+# echo "NO texto plano"
+# exit 1
+# fi
+
 echo "INCONCISTENCIAS" >>log.txt
 erroesDeEspacio=$(grep -P -o '[ \t][ \t]+' "$2" | wc -l) 
 echo "Errores de ESPACIADO: $erroesDeEspacio" >> log.txt
-sed 's/\t/ /g; s/$/ /' "$2" > temp.txt 
+sed 's/\t/ /g; s/$/ /' "$2" > temp.txt  #reemplaza tabas por espacio y pone al final de cada linea un espacio
 
 ### cuenta los errores de COMA sin esapcio adelante ### 
 caracterEspacio=$(grep -o -i ", " temp.txt | wc -l) 
@@ -153,7 +159,11 @@ if [[ caracter -lt 0 ]]
 fi
 echo "Parentesis: $caracter" >> log.txt
     ########coma######## ###punto y coma###  ######punto#######    
-sed 's/,/, /g; s/ ,/,/g; s/;/; /g; s/ ;/;/g; s/\./. /g; s/ \././g; s/\t/ /g; s/ \+ / /g; s/^[ t]*//; s/[ t]*$//; /^$/d' "$2" > salida.txt #--> esto hace lo q pide la primera parte
+#####sed 's/,/, /g; s/ ,/,/g; s/;/; /g; s/ ;/;/g; s/\./. /g; s/ \././g; s/\t/ /g; s/ \+ / /g; s/^[ t]*//; s/[ t]*$//; /^$/d' "$2" > salida.txt #--> esto hace lo q pide la primera parte
+ #sed 's/ ,/,/g; s/,/, /g; s/;/; /g; s/ ;/;/g; s/\./. /g; s/ \././g; s/\t/ /g; s/ \+ / /g; s/^[ t]*//; s/[ t]*$//; /^$/d' "$2" > salida.txt #--> esto hace lo q pide la primera parte
+  sed 's/ \+ / /g; s/ ,/,/g;  s/,/, /g; s/ ;/;/g; s/;/; /g; s/ \././g; s/\./. /g;s/\t/ /g; s/ \+ / /g; s/^[ t]*//; s/[ t]*$//; /^$/d' temp.txt > salida.txt
+  # reemplazando los espacios antes me evito q cuando reemplazo es el 
+  #espacio caracter quede con mas espcios atras y cuando reemplace luego todos los espacios quede con uno solo atras, osea mal
   #uso el \. porq si no el puinto lo toma como cualqueir caracter
 #grep -o -i '  ' $2 | wc -l
 
@@ -164,8 +174,10 @@ extension=$([[ "$2" = *.* ]] && echo "${2##*.}") # con este obtengo la extension
 if [[ $extension == "" ]]
 then
       mv "salida.txt" "$nuevoNombre" 
+  
 else
       mv "salida.txt" "$nuevoNombre.$extension" 
+ 
 fi 
 
 #mv salida.txt $ruta
