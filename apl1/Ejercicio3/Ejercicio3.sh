@@ -130,7 +130,7 @@ if ! test -w "$output";then
 fi
 
 
-if [[ ! "$(ls "$directorio")" ]]
+if [[  -z "`find $directorio -type f`"  ]]
 then
     echo "el directorio está vacio"
     exit 7

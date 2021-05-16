@@ -10,7 +10,7 @@
   #  Paz Zarate Evelyn  Jessica         37039295
   #  Perez Lucas Daniel                 39656325
   #  Ramos Marcos                       35896637
-# Nro entrega: Primera Entrega
+# Nro entrega: Segunda Entrega
 # +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
 
 function ayuda()
