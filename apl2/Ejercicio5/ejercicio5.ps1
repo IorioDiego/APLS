@@ -1,3 +1,15 @@
+# +++++++++++++++ENCABEZADO+++++++++++++++++++++++++++
+# Nombre script: Ejercicio5.ps1
+# Trabajo Práctico Nro. 2 (GRUPAL)
+# Ejercicio: 5
+# Integrantes:
+  #  Cardozo Emanuel                    35000234
+  #  Iorio Diego                        40730349
+  #  Perez Lucas Daniel                 39656325
+  #  Ramos Marcos                       35896637
+# Nro entrega: Primera Entrega
+# +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
+
 <#
     .SYNOPSIS
         Script para procesar las actas de finales rendidos por los alumnos

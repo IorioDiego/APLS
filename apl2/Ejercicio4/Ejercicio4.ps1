@@ -1,27 +1,29 @@
 # +++++++++++++++ENCABEZADO+++++++++++++++++++++++++++
-# Nombre script: Ejercicio2.sh
-# Trabajo Práctico Nro. 1 (GRUPAL)
-# Ejercicio: 2
+# Nombre script: Ejercicio4.ps1
+# Trabajo Práctico Nro. 2 (GRUPAL)
+# Ejercicio: 4
 # Integrantes:
   #  Cardozo Emanuel                    35000234
   #  Iorio Diego                        40730349
-  #  Paz Zarate Evelyn  Jessica         37039295
   #  Perez Lucas Daniel                 39656325
   #  Ramos Marcos                       35896637
 # Nro entrega: Primera Entrega
 # +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
 
-
 <#
     .SYNOPSIS
-   
+    El script cambia el evento de creacion de archivos ,en una carpeta especifica, para que cuando se
+    de ese evento , el archivo sea movido a otro directorio tambien especificado
     
     .DESCRIPTION
-   
-    .EXAMPLE
-    
+    El usuario envia como paramtros la carpeta descargas que sera monitoreada, y la destino carpeta
+     (si no es especificada sera la misma que la de descargas) donde seran enviandos los archivos 
+     descargados   
 
     .EXAMPLE
+    ./Ejercicio4.ps1 -Destino carpeta_destino -Descargas carpeta_a_monitorear 
+    ./Ejercicio4.ps1 -Descargas carpeta_a_monitorear -Destino carpeta_destino
+    ./Ejercicio4.ps1 -Detener
 
 #>
 
@@ -78,61 +80,6 @@ $ex=$n.Extension
 $ex=$ex -replace "^."
 $ex="$ex".ToUpper()
 New-Item "$pathCompletoDestino/$ex" -Type Directory
-Move-Item -Path $path -Destination "$pathCompletoDestino/$ex" -PassThru
+Move-Item -Path $path -Destination "$pathCompletoDestino/$ex" -PassThru -Force #muevo los archivos y los sobreeescribo con el -force
 }
 
-
-
-# Push-Location -Path $pathCompleto # me muevo a esta direccion
-
-# Get-ChildItem
-# Get-Location #obtengo la direccion donde estoy parado
-
-# Pop-Location # vuelvo a donde estaba antes
-# Get-Location
-
-
-
-
-# if [ $1 != $2 ]
-#                         then
-#                                 IFS=$'\n'
-#                                 newFiles=($(ls -1a "$1"))
-#                                 for elem in ${newFiles[@]}
-#                                 do
-#                                         echo "archivo :$elem"
-#                                         primerCar=$(expr substr $elem 1 1)
-#                                         if [ $primerCar == '.' ]
-#                                         then
-#                                                 extension=$(echo $elem | awk -F . '{print $3}')
-#                                         else
-#                                                 extension=$([[ "$elem" = *.* ]] && echo "${elem##*.}") 
-#                                         fi
-#                                         primerCar=$(expr substr $elem 1 1)
-#                                                 if [ -z $extension ] || ([ -z $extension ] && [ $primerCar == "." ])
-#                                                 then 
-#                                                         mv "$1/$elem" "$2"
-#                                                 else
-#                                                         directorio=0
-#                                                         ciclos=0   
-#                                                         mkdir "$2/temp"    
-#                                                         destiny=($(ls -l $2 | grep ^d | awk '{print $9}'))
-                                                        
-#                                                         for d in ${destiny[@]}
-#                                                         do
-#                                                                 ciclos=$(( ciclos + 1))
-#                                                                 if [[ "${d,,}" == "${extension,,}" ]]
-#                                                                 then
-#                                                                         directorio=1
-#                                                                         mv "$1/$elem" "$2/$d"
-#                                                                 else 
-#                                                                         mkdir "$2/${extension^^}"
-#                                                                         mv "$1/$elem" "$2/${extension^^}"
-#                                                                 fi
-#                                                         done
-#                                                         rmdir $2/temp
-#                                                 fi
-#                                 done
-#                         fi
-#                         oldStat=$newStat
-#                         unset IFS

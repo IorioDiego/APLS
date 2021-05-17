@@ -1,3 +1,15 @@
+# +++++++++++++++ENCABEZADO+++++++++++++++++++++++++++
+# Nombre script: Ejercicio1.ps1
+# Trabajo Práctico Nro. 2 (GRUPAL)
+# Ejercicio: 1
+# Integrantes:
+  #  Cardozo Emanuel                    35000234
+  #  Iorio Diego                        40730349
+  #  Perez Lucas Daniel                 39656325
+  #  Ramos Marcos                       35896637
+# Nro entrega: Primera Entrega
+# +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
+
 [CmdletBinding()]
 # Recibe 2 parámetros: valida que el primero sea un directorio y el segundo por defecto lo deja en 0.
 Param (

@@ -1,7 +1,7 @@
 # +++++++++++++++ENCABEZADO+++++++++++++++++++++++++++
 # Nombre script: Ejercicio3.ps1
 # Trabajo Práctico Nro. 2 (GRUPAL)
-# Ejercicio: 6
+# Ejercicio: 3
 # Integrantes:
   #  Cardozo Emanuel                    35000234
   #  Iorio Diego                        40730349

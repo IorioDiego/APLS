@@ -1,11 +1,10 @@
 # +++++++++++++++ENCABEZADO+++++++++++++++++++++++++++
-# Nombre script: Ejercicio2.sh
-# Trabajo Práctico Nro. 1 (GRUPAL)
+# Nombre script: Ejercicio2.ps1
+# Trabajo Práctico Nro. 2 (GRUPAL)
 # Ejercicio: 2
 # Integrantes:
   #  Cardozo Emanuel                    35000234
   #  Iorio Diego                        40730349
-  #  Paz Zarate Evelyn  Jessica         37039295
   #  Perez Lucas Daniel                 39656325
   #  Ramos Marcos                       35896637
 # Nro entrega: Primera Entrega
