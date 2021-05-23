@@ -1,4 +1,0 @@
-2021-05-23T15.44.45.4249650-03.00_IDX_TEMP_SEP_ejercicio6.ps1 ejercicio6.ps1 /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6
-2021-05-23T15.45.49.5029310-03.00_IDX_TEMP_SEP_test.txt test.txt /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6
-2021-05-23T15.46.17.5832240-03.00_IDX_TEMP_SEP_test.txt test.txt /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6
-2021-05-23T16.28.22.5553880-03.00_IDX_TEMP_SEP_test.txt test.txt /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6

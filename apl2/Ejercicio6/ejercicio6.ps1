@@ -36,6 +36,20 @@ function deleteFromIndexFile([PSCustomObject] $file){
     Get-Content $INDEX_PATH | Where-Object {$_ -notmatch $file.alias} | Set-Content $INDEX_PATH
 }
 
+function addToTrash([PSCustomObject] $file) {
+    Move-Item -Path "$($file.path)/$($file.originalName)" -Destination "$($TRASH_PATH)/$($file.alias)"
+}
+
+function restoreFromTrash([PSCustomObject] $file) {
+    $destination = "$($file.path)/$($file.originalName)"
+
+    if(Test-Path -Path $destination){
+        Write-Error "No se puede restaurar, ya existe un archivo con ese nombre en la ruta de destino." -ErrorAction Stop
+    }
+
+    Move-Item -Path "$($TRASH_PATH)/$($file.alias)" -Destination $destination
+}
+
 function BuildFilesTable {
     Get-Content $INDEX_PATH | ForEach-Object {
         $values = $_.split()
@@ -68,6 +82,7 @@ function TrashFile([System.IO.FileSystemInfo] $fileInfo) {
         path=$fileInfo.Directory.FullName
     }
     
+    addToTrash($newDeletedFile)
     addToFilesTable($newDeletedFile)
     addToIndexFile($newDeletedFile)
 }
@@ -92,6 +107,7 @@ function RestoreFile([String] $fileName){
     $selectedIndex--
     $fileToRestore = $filesWithTheSameName[$selectedIndex]
     
+    restoreFromTrash($fileToRestore)
     deleteFromFilesTable($fileToRestore)
     deleteFromIndexFile($fileToRestore)
 }
@@ -99,4 +115,4 @@ function RestoreFile([String] $fileName){
 $filesTable = @{}
 Initialize;
 # TrashFile(Get-ChildItem $f)
-# RestoreFile("test.txt")
+RestoreFile("test.txt")
