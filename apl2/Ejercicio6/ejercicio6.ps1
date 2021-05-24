@@ -9,110 +9,22 @@ Param(
         }
         return $true
     })]
-    [String] $f
+    [String] $f,
+    [String] $r,
+    [Switch] $l
 )
-
-$ROOT_PATH = "./"
-$INDEX_PATH = "./index.txt"
-$TRASH_PATH = "./Papelera"
-$CUSTOM_SEPARATOR = "_IDX_TEMP_SEP_"
-
-function addToFilesTable([PSCustomObject] $file) {
-    if(!$filesTable.ContainsKey($file.originalName)) {
-        $filesTable[$file.originalName] = New-Object System.Collections.ArrayList
-    }
-    $filesTable[$file.originalName].Add($file)
-}
-
-function deleteFromFilesTable([PSCustomObject] $file){
-    $filesTable[$fileName].Remove($file)
-}
-
-function addToIndexFile([PSCustomObject] $file){
-    Add-Content -Path $INDEX_PATH -Value "$($file.alias) $($file.originalName) $($file.path)"
-}
-
-function deleteFromIndexFile([PSCustomObject] $file){
-    Get-Content $INDEX_PATH | Where-Object {$_ -notmatch $file.alias} | Set-Content $INDEX_PATH
-}
-
-function addToTrash([PSCustomObject] $file) {
-    Move-Item -Path "$($file.path)/$($file.originalName)" -Destination "$($TRASH_PATH)/$($file.alias)"
-}
-
-function restoreFromTrash([PSCustomObject] $file) {
-    $destination = "$($file.path)/$($file.originalName)"
-
-    if(Test-Path -Path $destination){
-        Write-Error "No se puede restaurar, ya existe un archivo con ese nombre en la ruta de destino." -ErrorAction Stop
-    }
-
-    Move-Item -Path "$($TRASH_PATH)/$($file.alias)" -Destination $destination
-}
-
-function BuildFilesTable {
-    Get-Content $INDEX_PATH | ForEach-Object {
-        $values = $_.split()
-        
-        addToFilesTable([PSCustomObject]@{
-            alias=$values[0]
-            originalName=$values[1]
-            path=$values[2]
-        })
-    }
-}
-
-function Initialize {
-    if (!(Test-Path $TRASH_PATH)) {
-        New-Item -ItemType Directory -Name Papelera -Path $ROOT_PATH
-        New-Item -ItemType File -Name index.txt -Path $ROOT_PATH
-    }
     
-    BuildFilesTable
-}
+Import-Module -Force "./utils/constants.ps1"
+Import-Module -Force "./utils/helpers.ps1"
 
-function createTimestamp {
-    Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
-}
-
-function TrashFile([System.IO.FileSystemInfo] $fileInfo) {
-    $newDeletedFile = [PSCustomObject]@{
-        alias="$(createTimestamp)$($CUSTOM_SEPARATOR)$($fileInfo.Name)"
-        originalName=$fileInfo.Name
-        path=$fileInfo.Directory.FullName
-    }
-    
-    addToTrash($newDeletedFile)
-    addToFilesTable($newDeletedFile)
-    addToIndexFile($newDeletedFile)
-}
-
-function RestoreFile([String] $fileName){
-    $filesWithTheSameName = $filesTable[$fileName]
-    $message = ""
-
-    for($i=0; $i -lt $filesWithTheSameName.Count; $i++) {
-        $file = $filesWithTheSameName[$i]
-        $message += "$($i+1) - $($file.originalName)`t $($file.path)`n"
-    }
-
-    $message += "`nQué archivo desea recuperar?"
-
-    [int] $selectedIndex = Read-Host $message
-
-    while( $selectedIndex -lt 1 -or $selectedIndex -gt $filesWithTheSameName.Count ){
-        Write-Output "`nVALOR INCORRECTO. Por favor, revise las opciones disponibles.`n"
-        $selectedIndex = Read-Host $message
-    }
-    $selectedIndex--
-    $fileToRestore = $filesWithTheSameName[$selectedIndex]
-    
-    restoreFromTrash($fileToRestore)
-    deleteFromFilesTable($fileToRestore)
-    deleteFromIndexFile($fileToRestore)
-}
-
-$filesTable = @{}
 Initialize;
+
+if($l) {
+    ListTrashFiles
+}
+
+if($r){
+    RestoreFile($r)
+}
+
 # TrashFile(Get-ChildItem $f)
-RestoreFile("test.txt")
