@@ -68,13 +68,26 @@ function Initialize([Switch] $CreateTrash) {
     BuildFilesTable
 }
 
-function TrashFile([System.IO.FileSystemInfo] $fileInfo) {
-    $newDeletedFile = [PSCustomObject]@{
-        alias="$(createTimestamp)$($CUSTOM_SEPARATOR)$($fileInfo.Name)"
-        Name=$fileInfo.Name
-        path=$fileInfo.Directory.FullName
-    }
+function TrashFile([String] $filePath) {
+
+    $fileInfo = Get-ChildItem $filePath
+    $newDeletedFile = [PSCustomObject]@{}
     
+    if(Test-Path $filePath -PathType Container){
+        $newDeletedFile | Add-Member -NotePropertyMembers @{
+            Alias="$(createTimestamp)$($CUSTOM_SEPARATOR)$($fileInfo.Directory.Name)";
+            Name=$fileInfo.Directory.Name;
+            Path=$fileInfo.Directory.Parent.FullName
+        }
+
+    } else {
+        $newDeletedFile | Add-Member -NotePropertyMembers @{
+            Alias="$(createTimestamp)$($CUSTOM_SEPARATOR)$($fileInfo.Name)";
+            Name=$fileInfo.Name;
+            Path=$fileInfo.Directory.FullName
+        }
+    }
+
     addToTrash($newDeletedFile)
     addToFilesTable($newDeletedFile)
     addToIndexFile($newDeletedFile)

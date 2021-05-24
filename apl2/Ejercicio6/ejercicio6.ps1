@@ -9,15 +9,7 @@
 
 [CmdletBinding( DefaultParameterSetName='addToTrash' )]
 Param(
-    [ValidateScript({
-        if(-Not ($_ | Test-Path) ){
-            throw "La ruta o archivo no existe." 
-        }
-        if(-Not ($_ | Test-Path -PathType Leaf) ){
-            throw "La ruta debe corresponder a un archivo."
-        }
-        return $true
-    })]
+    [ValidateScript({ Test-Path $_ }, ErrorMessage="La ruta o archivo no existe.")]
     [Parameter(Mandatory, Position=0, ParameterSetName='addToTrash')]
     [String] $file,
     [Parameter(Mandatory, ParameterSetName='restore')]
@@ -50,6 +42,6 @@ if($e){
 if($file){
     Initialize -CreateTrash;
     UncompressTrash
-    TrashFile(Get-ChildItem $file)
+    TrashFile($file)
     CompressTrash
 }
