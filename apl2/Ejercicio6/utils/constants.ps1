@@ -1,4 +1,5 @@
-$ROOT_PATH = "./"
-$INDEX_PATH = "./index.txt"
-$TRASH_PATH = "./Papelera"
+$ROOT_PATH = pwd
+$INDEX_PATH = "$($ROOT_PATH)/index.txt"
+$UNCOMPRESSED_TRASH_PATH = "$($ROOT_PATH)/Papelera"
+$COMPRESSED_TRASH_PATH = "$($ROOT_PATH)/Papelera.zip"
 $CUSTOM_SEPARATOR = "_IDX_TEMP_SEP_"

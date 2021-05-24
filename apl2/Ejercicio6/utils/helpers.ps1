@@ -20,7 +20,7 @@ function deleteFromIndexFile([PSCustomObject] $file){
 }
 
 function addToTrash([PSCustomObject] $file) {
-    Move-Item -Path "$($file.Path)/$($file.Name)" -Destination "$($TRASH_PATH)/$($file.Alias)"
+    Move-Item -Path "$($file.Path)/$($file.Name)" -Destination "$($UNCOMPRESSED_TRASH_PATH)/$($file.Alias)"
 }
 
 function restoreFromTrash([PSCustomObject] $file) {
@@ -31,10 +31,14 @@ function restoreFromTrash([PSCustomObject] $file) {
         exit
     }
 
-    Move-Item -Path "$($TRASH_PATH)/$($file.Alias)" -Destination $destination
+    Move-Item -Path "$($UNCOMPRESSED_TRASH_PATH)/$($file.Alias)" -Destination $destination
 }
 
 function BuildFilesTable {
+    if(-Not (Test-Path $INDEX_PATH)){
+        return $null
+    }
+
     Get-Content $INDEX_PATH | ForEach-Object {
         $values = $_.split()
         
@@ -50,10 +54,15 @@ function createTimestamp {
     Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 }
 
-function Initialize {
-    if (!(Test-Path $TRASH_PATH)) {
-        New-Item -ItemType Directory -Name Papelera -Path $ROOT_PATH
-        New-Item -ItemType File -Name index.txt -Path $ROOT_PATH
+function Initialize([Switch] $CreateTrash) {
+    if($CreateTrash) {
+        if (-Not (Test-Path $COMPRESSED_TRASH_PATH)) {
+            New-Item -ItemType Directory -Name Papelera -Path $ROOT_PATH
+        }
+        
+        if (-Not (Test-Path $INDEX_PATH)) {
+            New-Item -ItemType File -Name index.txt -Path $ROOT_PATH
+        }
     }
     
     BuildFilesTable
@@ -102,12 +111,18 @@ function RestoreFile([String] $fileName){
         deleteFromIndexFile($fileToRestore)
     } else {
         Write-Host "No hay archivos en la papelera con ese nombre. Utiliza la opción -l para listar los elementos."
-        exit
     }
 }
 
 function ListTrashFiles {
+
+    if(-Not (Test-Path $COMPRESSED_TRASH_PATH)){
+        Write-Host "La papelera se encuentra vacía."
+        exit
+    }
+
     Write-Host "Elementos de la papelera"
+
     foreach ($key in $filesTable.Keys) {
         foreach ($file in $filesTable[$key]) {
             Select-Object -InputObject $file -Property Name,Path
@@ -116,7 +131,25 @@ function ListTrashFiles {
 }
 
 function CleanTrash {
-    Remove-Item "$($TRASH_PATH)/*" -Recurse
-    Set-Content $INDEX_PATH -Value $null
+
+    if(Test-Path $COMPRESSED_TRASH_PATH) {
+        Remove-Item $COMPRESSED_TRASH_PATH
+    }
+
+    if(Test-Path $INDEX_PATH) {
+        Remove-Item $INDEX_PATH
+    }
     Write-Host "La papelera se ha vaciado exitosamente."
+}
+
+function CompressTrash {
+    Compress-Archive -Path $UNCOMPRESSED_TRASH_PATH -DestinationPath $COMPRESSED_TRASH_PATH
+    Remove-Item $UNCOMPRESSED_TRASH_PATH -Recurse
+}
+
+function UncompressTrash {
+    if(Test-Path $COMPRESSED_TRASH_PATH) {
+        Expand-Archive -Path $COMPRESSED_TRASH_PATH -DestinationPath $ROOT_PATH
+        Remove-Item $COMPRESSED_TRASH_PATH
+    }
 }
