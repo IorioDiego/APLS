@@ -11,7 +11,8 @@ Param(
     })]
     [String] $f,
     [String] $r,
-    [Switch] $l
+    [Switch] $l,
+    [Switch] $e
 )
     
 Import-Module -Force "./utils/constants.ps1"
@@ -27,4 +28,10 @@ if($r){
     RestoreFile($r)
 }
 
-# TrashFile(Get-ChildItem $f)
+if($e){
+    CleanTrash
+}
+
+if($f){
+    TrashFile(Get-ChildItem $f)
+}

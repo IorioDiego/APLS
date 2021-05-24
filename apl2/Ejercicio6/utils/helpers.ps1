@@ -114,3 +114,9 @@ function ListTrashFiles {
         }
     }
 }
+
+function CleanTrash {
+    Remove-Item "$($TRASH_PATH)/*" -Recurse
+    Set-Content $INDEX_PATH -Value $null
+    Write-Host "La papelera se ha vaciado exitosamente."
+}
