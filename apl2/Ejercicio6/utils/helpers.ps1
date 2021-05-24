@@ -102,8 +102,17 @@ function getFileToRestore {
     return $filesWithTheSameName[$selectedIndex]
 }
 
+function TrashIsEmpty {
+    if(Test-Path $UNCOMPRESSED_TRASH_PATH) {
+        $uncompresedTrash = Get-ChildItem $UNCOMPRESSED_TRASH_PATH
+        return $uncompresedTrash.Count -eq 0
+    }
+
+    return (-Not (Test-Path $COMPRESSED_TRASH_PATH))
+}
+
 function RestoreFile([String] $fileName){
-    if($filesTable.ContainsKey($fileName)){
+    if( -Not (TrashIsEmpty) -and $filesTable.ContainsKey($fileName)){
         $fileToRestore = getFileToRestore
         
         restoreFromTrash($fileToRestore)
@@ -116,7 +125,7 @@ function RestoreFile([String] $fileName){
 
 function ListTrashFiles {
 
-    if(-Not (Test-Path $COMPRESSED_TRASH_PATH)){
+    if(TrashIsEmpty){
         Write-Host "La papelera se encuentra vacía."
         exit
     }
@@ -132,6 +141,11 @@ function ListTrashFiles {
 
 function CleanTrash {
 
+    if(TrashIsEmpty){
+        Write-Host "La papelera ya se encuentra vacía."
+        exit
+    }
+
     if(Test-Path $COMPRESSED_TRASH_PATH) {
         Remove-Item $COMPRESSED_TRASH_PATH
     }
@@ -145,6 +159,10 @@ function CleanTrash {
 function CompressTrash {
     Compress-Archive -Path $UNCOMPRESSED_TRASH_PATH -DestinationPath $COMPRESSED_TRASH_PATH
     Remove-Item $UNCOMPRESSED_TRASH_PATH -Recurse
+
+    if(TrashIsEmpty) {
+        Remove-Item $INDEX_PATH
+    }
 }
 
 function UncompressTrash {
