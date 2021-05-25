@@ -71,8 +71,10 @@ Param(
     [Switch] $e
 )
     
+Import-Module -Force "./utils/compressor_handlers.ps1"
 Import-Module -Force "./utils/constants.ps1"
 Import-Module -Force "./utils/helpers.ps1"
+Import-Module -Force "./utils/main.ps1"
 
 if($l) {
     Initialize;
