@@ -1,3 +1,3 @@
-2021-05-24T21.11.17.1185660-03.00_IDX_TEMP_SEP_a.txt a.txt /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6
-2021-05-24T21.11.24.6366560-03.00_IDX_TEMP_SEP_carpeta carpeta /Users/emanuelcardozo/unlam/sisop/APLS/apl2
-2021-05-24T21.11.38.3309140-03.00_IDX_TEMP_SEP_carpeta carpeta /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6
+2021-05-24T21.18.09.6863170-03.00_IDX_TEMP_SEP_carpeta carpeta /Users/emanuelcardozo/unlam/sisop/APLS/apl2
+2021-05-24T21.18.13.2820180-03.00_IDX_TEMP_SEP_carpeta carpeta /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6
+2021-05-24T21.18.26.2536320-03.00_IDX_TEMP_SEP_a.txt a.txt /Users/emanuelcardozo/unlam/sisop/APLS/apl2/Ejercicio6

@@ -97,6 +97,11 @@ function TrashFile([String] $filePath) {
 
 function getFileToRestore {
     $filesWithTheSameName = $filesTable[$fileName]
+    
+    if($filesWithTheSameName.Count -eq 1){
+        return ($filesWithTheSameName[0])
+    }
+
     $message = ""
 
     for($i=0; $i -lt $filesWithTheSameName.Count; $i++) {
