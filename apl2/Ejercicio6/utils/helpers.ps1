@@ -4,7 +4,7 @@ function addToFilesTable([PSCustomObject] $file) {
     if(!$filesTable.ContainsKey($file.Name)) {
         $filesTable[$file.Name] = New-Object System.Collections.ArrayList
     }
-    $filesTable[$file.Name].Add($file)
+    $null = $filesTable[$file.Name].Add($file)
 }
 
 function deleteFromFilesTable([PSCustomObject] $file){
@@ -57,11 +57,11 @@ function createTimestamp {
 function Initialize([Switch] $CreateTrash) {
     if($CreateTrash) {
         if (-Not (Test-Path $COMPRESSED_TRASH_PATH)) {
-            New-Item -ItemType Directory -Name Papelera -Path $ROOT_PATH
+            $null = New-Item -ItemType Directory -Name Papelera -Path $ROOT_PATH
         }
         
         if (-Not (Test-Path $INDEX_PATH)) {
-            New-Item -ItemType File -Name index.txt -Path $ROOT_PATH
+            $null = New-Item -ItemType File -Name index.txt -Path $ROOT_PATH
         }
     }
     
@@ -91,6 +91,8 @@ function TrashFile([String] $filePath) {
     addToTrash($newDeletedFile)
     addToFilesTable($newDeletedFile)
     addToIndexFile($newDeletedFile)
+
+    Write-Host "El elemento ha sido eliminado exitosamente."
 }
 
 function getFileToRestore {
@@ -131,6 +133,8 @@ function RestoreFile([String] $fileName){
         restoreFromTrash($fileToRestore)
         deleteFromFilesTable($fileToRestore)
         deleteFromIndexFile($fileToRestore)
+
+        Write-Host "Se ha recuperado el archivo exitosamente."
     } else {
         Write-Host "No hay archivos en la papelera con ese nombre. Utiliza la opción -l para listar los elementos."
     }

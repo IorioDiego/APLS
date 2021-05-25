@@ -1,11 +1,12 @@
 # TODO: 
 # 1 - Help
-# 2 - Eliminar un archivo sin argumento (-f)
-
+# LISTO - Eliminar un archivo sin argumento (-f)
+# LISTO - Comprimir y descomprimir papelera
 # 4 - Ubicar la papelera donde dice el enunciado
-# 5 - Eliminar las salidas de los Add de los arrays
+# LISTO - Eliminar las salidas en la consola de algunos comandos.
 # 6 - Agregar una salida por defecto para comando no encontrado.
-# 7 - Hacer los argumentos excluyentes. Ej: -e y -l
+# LISTO - Hacer los argumentos excluyentes. Ej: -e y -l
+# 8 - Prevenir el mensaje de restaurar elementos si hay uno solo con ese nombre
 
 [CmdletBinding( DefaultParameterSetName='addToTrash' )]
 Param(
