@@ -57,7 +57,7 @@ function createTimestamp {
 function Initialize([Switch] $CreateTrash) {
     if($CreateTrash) {
         if (-Not (Test-Path $COMPRESSED_TRASH_PATH)) {
-            $null = New-Item -ItemType Directory -Name Papelera -Path $ROOT_PATH
+            $null = New-Item -ItemType Directory -Name Papelera -Path $PAPELERA_ROOT_PATH
         }
         
         if (-Not (Test-Path $INDEX_PATH)) {

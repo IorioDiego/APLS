@@ -2,7 +2,7 @@
 # LISTO - Help
 # LISTO - Eliminar un archivo sin argumento (-f)
 # LISTO - Comprimir y descomprimir papelera
-# 4 - Ubicar la papelera donde dice el enunciado
+# EN PROGRESO - Ubicar la papelera donde dice el enunciado
 # LISTO - Eliminar las salidas en la consola de algunos comandos.
 # 6 - Agregar una salida por defecto para comando no encontrado.
 # LISTO - Hacer los argumentos excluyentes. Ej: -e y -l
