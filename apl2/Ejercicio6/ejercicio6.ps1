@@ -1,13 +1,3 @@
-# TODO: 
-# LISTO - Help
-# LISTO - Eliminar un archivo sin argumento (-f)
-# LISTO - Comprimir y descomprimir papelera
-# EN PROGRESO - Ubicar la papelera donde dice el enunciado
-# LISTO - Eliminar las salidas en la consola de algunos comandos.
-# 6 - Agregar una salida por defecto para comando no encontrado.
-# LISTO - Hacer los argumentos excluyentes. Ej: -e y -l
-# LISTO - Prevenir el mensaje de restaurar elementos si hay uno solo con ese nombre
-
 # +++++++++++++++ENCABEZADO+++++++++++++++++++++++++++
 # Nombre script: Ejercicio5.ps1
 # Trabajo Práctico Nro. 2 (GRUPAL)
