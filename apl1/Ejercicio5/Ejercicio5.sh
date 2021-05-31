@@ -7,11 +7,15 @@
 # Integrantes:
   #  Cardozo Emanuel                    35000234
   #  Iorio Diego                        40730349
-  #  Paz Zarate Evelyn  Jessica         37039295
   #  Perez Lucas Daniel                 39656325
-  #  Ramos Marcos                       35896637
-# Nro entrega: Segunda Entrega
+# Nro entrega: Tercera Entrega
 # +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
+rutaDeAchivo()
+{
+local PATH="$1"
+
+  [[ "$PATH" = */* ]] && echo "${PATH%/*}" 
+}
 
 function ayuda()
 {   
@@ -45,7 +49,6 @@ then
 	ARGS=`getopt -q -o n:s: --long notas:,salida: -n 'parse-options' -- "$@"`
 if [ $? != 0 ]
      then
-	 echo "HOLA"
    	ayuda;
      exit 1;
 fi
@@ -62,7 +65,7 @@ if [ $1 == $3 ]
 
 #     -s | --salida ) ariaAt=$2 ; shift ; shift ;;
 	 -n | --notas ) dirCsv="$2"
-				echo $dirCsv
+				
 			if [[ ! -d $dirCsv ]]
 			then
 				echo "$dirCsv no existe o no es un directorio"
@@ -78,16 +81,24 @@ if [ $1 == $3 ]
 			fi ; shift ; shift ;;
 #     -s | --salida ) etiquetas=$2; shift ; shift ;;
 	-s | --salida ) salida="$2"
-			dirSalida="${salida%/*}" #Extraigo el directorio de salida
-			echo $dirSalida
-			if [[ ! -d $dirSalida ]]
+		#	dirSalida="${salida%/*}" #Extraigo el directorio de salida
+			#echo "$dirSalida"
+			dirSalida=$(rutaDeAchivo "$salida")
+			if [[ "$dirSalida" != "" ]] && [[ ! -d $dirSalida ]]
 			then
 				echo "$dirSalida no existe o no es un directorio"
 				echo -e "$0 -? | -h | --help para ayuda"
 				exit 0
 			fi
+
+			if [[ -d $2 ]] 
+			then
+				echo "$2 no es el nombre de archivo  valido"
+				echo -e "$0 -? | -h | --help para ayuda"
+				exit 0
+			fi
 			
-			if [[ ! -w $dirSalida ]]
+			if [[ "$dirSalida" != "" ]] && [[ ! -w $dirSalida ]]
 			then
 				echo "No tiene permisos de escritura para el directorio: $dirSalida"
 				echo -e "$0 -? | -h | --help para ayuda"

@@ -7,10 +7,8 @@
 # Integrantes:
   #  Cardozo Emanuel                    35000234
   #  Iorio Diego                        40730349
-  #  Paz Zarate Evelyn  Jessica         37039295
   #  Perez Lucas Daniel                 39656325
-  #  Ramos Marcos                       35896637
-# Nro entrega: Primera Entrega
+# Nro entrega: Tercera Entrega
 # +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
 
 Help(){
@@ -76,11 +74,6 @@ fi
    exit 1
  fi
 
-
-# if ! [[ $(cat "$2") =~ ^.*$ ]]; then
-# echo "NO texto plano"
-# exit 1
-# fi
 
 echo "INCONCISTENCIAS" >>log.txt
 erroesDeEspacio=$(grep -P -o '[ \t][ \t]+' "$2" | wc -l) 
@@ -159,16 +152,14 @@ if [[ caracter -lt 0 ]]
 fi
 echo "Parentesis: $caracter" >> log.txt
     ########coma######## ###punto y coma###  ######punto#######    
-#####sed 's/,/, /g; s/ ,/,/g; s/;/; /g; s/ ;/;/g; s/\./. /g; s/ \././g; s/\t/ /g; s/ \+ / /g; s/^[ t]*//; s/[ t]*$//; /^$/d' "$2" > salida.txt #--> esto hace lo q pide la primera parte
- #sed 's/ ,/,/g; s/,/, /g; s/;/; /g; s/ ;/;/g; s/\./. /g; s/ \././g; s/\t/ /g; s/ \+ / /g; s/^[ t]*//; s/[ t]*$//; /^$/d' "$2" > salida.txt #--> esto hace lo q pide la primera parte
   sed 's/ \+ / /g; s/ ,/,/g;  s/,/, /g; s/ ;/;/g; s/;/; /g; s/ \././g; s/\./. /g;s/\t/ /g; s/ \+ / /g; s/^[ t]*//; s/[ t]*$//; /^$/d' temp.txt > salida.txt
   # reemplazando los espacios antes me evito q cuando reemplazo es el 
   #espacio caracter quede con mas espcios atras y cuando reemplace luego todos los espacios quede con uno solo atras, osea mal
   #uso el \. porq si no el puinto lo toma como cualqueir caracter
-#grep -o -i '  ' $2 | wc -l
 
-nombre="${2##*/}"   
-nuevoNombre="$nombre_[$(date +%Y-%0m-%0d_%k:%M:%S)]"
+nombre="${2##*/}"  
+nombre="${nombre%.*}" 
+nuevoNombre="$nombre"_"$(date +%Y%0m%0d%k%M%S)" #nuevoNombre="$nombre"_"$(date +%Y-%0m-%0d_%k:%M)"
 ruta=$(rutaDeAchivo "$2")
 extension=$([[ "$2" = *.* ]] && echo "${2##*.}") # con este obtengo la extension y tiene el caso de si tuviera mas de una
 if [[ $extension == "" ]]
@@ -179,9 +170,5 @@ else
       mv "salida.txt" "$nuevoNombre.$extension" 
  
 fi 
-
-#mv salida.txt $ruta
-#mv log.txt $ruta
 rm temp.txt
-#mv "salida.txt" "$nuevoNombre.$extension" 
 mv "log.txt" "$nuevoNombre.log"

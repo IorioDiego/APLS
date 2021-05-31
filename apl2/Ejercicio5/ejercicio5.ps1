@@ -6,8 +6,7 @@
   #  Cardozo Emanuel                    35000234
   #  Iorio Diego                        40730349
   #  Perez Lucas Daniel                 39656325
-  #  Ramos Marcos                       35896637
-# Nro entrega: Primera Entrega
+# Nro entrega: Segunda Entrega
 # +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
 
 <#
@@ -38,9 +37,32 @@ Param
 (
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
+    [ValidateScript( {
+        if ( -Not (Test-Path $_ ) ) {
+            throw "El directorio de notas no existe"
+        }
+
+        if ( -Not (Test-Path $_) ) {
+            throw "El directorio de notas no existe"  
+        }
+        return $true;
+
+    })]
     [string] $notas,
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
+    [ValidateScript( {
+        # Directorio donde el usuario quiere guardar el archivo JSON
+        $RUTA = split-path $_ 
+        if($RUTA -eq ""){
+        $RUTA= Get-Location
+        }
+
+        if ( -Not (Test-Path $RUTA) ) {
+            throw "La ruta del archivo JSON no existe"
+        }
+        return $true
+    })]
     [string] $salida
 )
 
@@ -49,24 +71,6 @@ Import-Module -Force "./Funciones/Funciones.ps1"
 Import-Module -Force "./Acta/Acta.ps1"
 Import-Module -Force "./Materia/Materia.ps1"
 
-# Directorio donde el usuario quiere guardar el archivo JSON
-$RUTA = split-path $salida 
-
-
-if ( !(Test-Path $notas ) ) {
-    write-host "El directorio de notas no existe"
-    exit
-}
-
-if ( !(Test-Path $RUTA) ) {
-    write-host "La ruta del archivo JSON no existe"
-    exit
-}
-
-if ( !(Test-Path $notas ) ) {
-    write-host "El directorio de notas no existe"
-    exit
-}
 
 <#
     Por parámetro se pasa la ruta junto con un archivo que todavía no se creó

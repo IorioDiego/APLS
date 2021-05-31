@@ -6,8 +6,7 @@
   #  Cardozo Emanuel                    35000234
   #  Iorio Diego                        40730349
   #  Perez Lucas Daniel                 39656325
-  #  Ramos Marcos                       35896637
-# Nro entrega: Primera Entrega
+# Nro entrega: Segunda Entrega
 # +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
 
 
@@ -43,11 +42,25 @@ Param(
             if ( -Not $FileInfo) {
                 throw "El archivo de entrada esta vacio"
             }
+          
+            $tipo="${_}: text/plain"  
+           $tipoArch=(file "$_" --mime-type)       
+           if( "$tipoArch" -ne "$tipo" ) {
+            throw "El archivo no es de texto plano"
+           }
+
             return $true
         })]
     $in
 )
 
+# tipo="text/plain"
+# tipoArch=$(file "$2" --mime-type)
+# if [[ "$tipoArch" != *$tipo*  ]]
+# then 
+#  echo "El archivo no es de texto plano"
+#   exit 1
+# fi
 
 
 $salida="salida.txt"
@@ -245,22 +258,40 @@ Get-Content $salida | ? {$_.trim() -ne ""} | Set-Content $salida
 
 
 
-$date = Get-Date -Format "[yyyy-MM-dd_HH:mm:ss]"
-#Rename-Item -Path "salida.txt" -NewName accessibilityTest_"$date.out"
+$ruta=Split-Path -Path "$in"
+$date = Get-Date -Format "yyyyMMddHHmmss" #"[yyyy-MM-dd_HH:mm]"
 $nombre=[io.path]::GetFileNameWithoutExtension($in)
 $extension=[io.path]::GetExtension($in)
 $nuevoNombre="$($nombre)_$date"
 
 
 if ($extension -eq "" ){
-
-    Rename-Item -Path "salida.txt" -NewName "$nuevoNombre"
+    Move-Item "salida.txt"  $ruta
+    if($ruta -eq ""){
+        Rename-Item -Path "salida.txt" -NewName "$nuevoNombre"
+    }else {
+        Rename-Item -Path "$ruta/salida.txt" -NewName "$nuevoNombre"
+    }
+   
+  
 }
 else {
-    Rename-Item -Path "salida.txt" -NewName "$($nuevoNombre)$extension"
-}
+    Move-Item   "salida.txt"  $ruta
+    if($ruta -eq ""){
+        Rename-Item -Path "salida.txt" -NewName "$($nuevoNombre)$extension"
+    }else {
+        Rename-Item -Path "$ruta/salida.txt" -NewName "$($nuevoNombre)$extension"
+    }
   
-Rename-Item -Path "log.txt" -NewName "$nuevoNombre.log"
+   
+}
+Move-Item   "log.txt" $ruta
+if($ruta -eq ""){
+    Rename-Item -Path "log.txt" -NewName "$nuevoNombre.log"
+}else {
+    Rename-Item -Path "$ruta/log.txt" -NewName "$nuevoNombre.log"
+}
+
 
 
 

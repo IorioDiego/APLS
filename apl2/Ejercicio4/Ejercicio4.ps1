@@ -3,11 +3,10 @@
 # Trabajo Práctico Nro. 2 (GRUPAL)
 # Ejercicio: 4
 # Integrantes:
-  #  Cardozo Emanuel                    35000234
-  #  Iorio Diego                        40730349
-  #  Perez Lucas Daniel                 39656325
-  #  Ramos Marcos                       35896637
-# Nro entrega: Primera Entrega
+#  Cardozo Emanuel                    35000234
+#  Iorio Diego                        40730349
+#  Perez Lucas Daniel                 39656325
+# Nro entrega: Segunda Entrega
 # +++++++++++++++FIN ENCABEZADO+++++++++++++++++++++++
 
 <#
@@ -29,7 +28,7 @@
 
 Param(
 
-    [Parameter (Mandatory = $true,ParameterSetName="grupo1")]
+    [Parameter (Mandatory = $true, ParameterSetName = "grupo1")]
     [ValidateNotNullOrEmpty()]
     [ValidateScript( {
             if ( -Not (Test-Path $_ )) {
@@ -39,47 +38,71 @@ Param(
         })]
     $Descargas,
 
-    [Parameter (ParameterSetName="grupo1")]
+    [Parameter (ParameterSetName = "grupo1")]
     $Destino,
-    [Parameter (ParameterSetName="grupo2")]
+    [Parameter (ParameterSetName = "grupo2")]
     [switch]$Detener
 
 )
 
-if($Detener){
+if ($Detener) {
     Unregister-Event -SourceIdentifier FileCreated
-    Write-Host "hola"
     exit 0
 }
 
-if($Destino -eq $null ){
-    $Destino=$Descargas
+if ($Destino -eq $null ) {
+    $Destino = $Descargas
 }
 
 
-$global:Descargas=$Descargas
-$global:Destino=$Destino
-#$pathCompleto= Get-ChildItem $Destino -recurse | % { Write-Host $_.FullName} 
-$pathCompletoDestino=Resolve-Path $Destino
-$pathCompletoDescargas=Resolve-Path $Descargas
-#Write-Host $pathCompleto
-$filter= "*.*"
+$global:Descargas = $Descargas
+$global:Destino = $Destino
+
+$pathCompletoDestino = Resolve-Path $Destino
+$pathCompletoDescargas = Resolve-Path $Descargas
+
+$filter = "*.*"
 $fileSystemWatcher = New-Object IO.FileSystemWatcher $pathCompletoDescargas, $filter -Property @{
     IncludeSubdirectories = $true
-    NotifyFilter = [IO.NotifyFilters]"FileName, LastWrite"
+    NotifyFilter          = [IO.NotifyFilters]"FileName, LastWrite"
 
 }
 
-$onCreated = Register-ObjectEvent $fileSystemWatcher Created -SourceIdentifier FileCreated -Action{
-$path = $Event.SourceEventArgs.FullPath 
-$n=@(dir $path | select  BaseName,Extension)
-#$n.Extension="$n.Extension" | ForEach-Object {$_ -replace '\.', 'x'}
-$pathCompletoDestino=Resolve-Path $Destino
-$pathCompletoDescargas=Resolve-Path $Descargas
-$ex=$n.Extension
-$ex=$ex -replace "^."
-$ex="$ex".ToUpper()
-New-Item "$pathCompletoDestino/$ex" -Type Directory
-Move-Item -Path $path -Destination "$pathCompletoDestino/$ex" -PassThru -Force #muevo los archivos y los sobreeescribo con el -force
+$onCreated = Register-ObjectEvent $fileSystemWatcher Created -SourceIdentifier FileCreated -Action {
+    $path = $Event.SourceEventArgs.FullPath 
+    $n = @(dir $path | select  BaseName, Extension)
+    $pathCompletoDestino = Resolve-Path $Destino
+    $pathCompletoDescargas = Resolve-Path $Descargas
+
+    $r = Split-Path -Path $path
+
+    $p = $path -replace "$r/", ""
+  
+    $canP = ($p -split '\.').count
+    
+
+
+
+    
+    if (($ex -eq "" ) -and ($canP -eq 3)) {
+    
+        $extensionOculto = Split-Path -Extension $path
+        $extensionOculto = $extensionOculto -replace "^."
+        $extensionOculto = "$extensionOculto".ToUpper()
+        New-Item "$pathCompletoDestino/$extensionOculto" -Type Directory
+        Move-Item -Path $path -Destination "$pathCompletoDestino/$extensionOculto" -PassThru -Force #muevo los archivos y los sobreeescribo con el -force
+        
+    
+    }
+    else {
+        
+        $ex = $n.Extension
+        $ex = $ex -replace "^."
+        $ex = "$ex".ToUpper()
+        New-Item "$pathCompletoDestino/$ex" -Type Directory
+        Move-Item -Path $path -Destination "$pathCompletoDestino/$ex" -PassThru -Force #muevo los archivos y los sobreeescribo con el -force
+    
+    }
+
 }
 
