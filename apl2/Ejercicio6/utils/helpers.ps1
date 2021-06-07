@@ -28,6 +28,7 @@ function restoreFromTrash([PSCustomObject] $file) {
 
     if(Test-Path -Path $destination){
         Write-Host "No se puede restaurar, ya existe un archivo con ese nombre en la ruta de destino."
+        CompressTrash
         exit
     }
 
