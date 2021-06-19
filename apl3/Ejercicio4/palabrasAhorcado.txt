@@ -1,0 +1,8 @@
+monitor
+solitario
+calculadora
+helado
+otorrinolaringologia
+universidad
+ventana
+acolchado
