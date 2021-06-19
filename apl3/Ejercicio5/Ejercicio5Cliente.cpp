@@ -15,11 +15,22 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <signal.h>
 
 using namespace std;
 void mostrarPalabra(char * );
+void handlerSigInt(int sig );
+
+
+ int socketComunicacion ;
+
 
 int main(int argc, char *argv[]){
+
+
+    struct sigaction action;
+     action.sa_handler = handlerSigInt;
+     sigaction(SIGINT,&action,NULL);
 
     //Validacion//
     
@@ -32,7 +43,7 @@ int main(int argc, char *argv[]){
     socketConfig.sin_port = htons(5000);
     inet_pton(AF_INET, argv[1], &socketConfig.sin_addr); 
 
-    int socketComunicacion = socket(AF_INET, SOCK_STREAM, 0);
+    socketComunicacion = socket(AF_INET, SOCK_STREAM, 0);
 
     int resultadoConexion = connect(socketComunicacion,
         (struct sockaddr *)&socketConfig, sizeof(socketConfig));
@@ -72,9 +83,9 @@ int main(int argc, char *argv[]){
 
     cout<<buffer<< endl;
 
-}while ( string(buffer) != string("FIN") );
+}while ( strcmp(buffer,"FIN\n" ) != 0  );
  
-
+cout << "terminar" << endl;
 close(socketComunicacion);
 return EXIT_SUCCESS;
 
@@ -90,5 +101,14 @@ void mostrarPalabra(char * p){
      }
 
      cout << endl << endl;
+
+}
+
+void handlerSigInt(int sig ){
+
+   
+     close(socketComunicacion);
+     exit(sig);
+
 
 }
