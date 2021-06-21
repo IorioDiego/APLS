@@ -28,6 +28,7 @@ void dibujarHangman(int);
  string  validarIngreso();
 void hayJugadorActivo();
 void help();
+void enviarMsj(const char * mensaje);
 
  int socketComunicacion ;
 sem_t *semBlockCliente;
@@ -141,7 +142,7 @@ int main(int argc, char *argv[]){
             bytesRecibidos = 0;
             bytesRecibidos = read (socketComunicacion,rBuffer,sizeof(rBuffer)-1 );
             rBuffer[bytesRecibidos] = 0;
-            printf("resultado %s\n", rBuffer);
+       
             ////fin recivo resultado ///
 
             //envio confirmacion para que pueda seguir el server
@@ -154,7 +155,7 @@ int main(int argc, char *argv[]){
             bytesRecibidos = 0;
             bytesRecibidos = read (socketComunicacion,rBuffer,sizeof(rBuffer)-1 );
             rBuffer[bytesRecibidos] = 0;
-            printf("resultado :%s\n", rBuffer);
+         
           
             // fin lee si fue fin o no (si perdi o si adivine la palabra)    
 
@@ -173,7 +174,7 @@ int main(int argc, char *argv[]){
          bytesRecibidos = 0;
          bytesRecibidos = read (socketComunicacion,rBuffer,sizeof(rBuffer)-1 );
          rBuffer[bytesRecibidos] = 0;
-         printf("resultado :%s\n", rBuffer);
+     
         //fin lee si gane o perdi  
 
         if(strcmp(rBuffer,"PERDISTE\r\n")==0){
@@ -230,9 +231,26 @@ void handlerSigInt(int sig ){
 
      sem_close(semBlockCliente);
     sem_unlink("bloqueoCliente");
-     close(socketComunicacion);
-     exit(sig);
+  
 
+     enviarMsj("DESCONECTADO");
+    //    enviarMsj("DESCONECTADO");
+    //   enviarMsj("DESCONECTADO");
+    //    enviarMsj("DESCONECTADO");
+    //      enviarMsj("DESCONECTADO");
+           close(socketComunicacion);
+
+     exit(sig);
+//12345
+
+}
+
+void enviarMsj(const char * mensaje){
+
+    char sBuffer[2000];
+
+    snprintf(sBuffer,sizeof(sBuffer),"%s\r\n", mensaje);
+    write(socketComunicacion,sBuffer,strlen(sBuffer));
 
 }
 
