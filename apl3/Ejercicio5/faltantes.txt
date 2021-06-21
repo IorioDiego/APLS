@@ -1,0 +1,16 @@
+-valdiar los enter en las letras y en las palabras
+
+
+-cambiar sigint de server por sigusr
+
+-hacer q solo pueda haber un cliente
+
+-hacer q solo pueda haber un servidor
+
+-hacer q ignore sigint
+
+-que el cliente muestre el historial de letras
+
+-cuando se le hace crl c al jugador el sever se desconecta(rompe todo)->corregir
+
+-hacer q sirva para mayusculas
