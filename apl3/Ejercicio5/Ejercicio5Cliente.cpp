@@ -62,17 +62,17 @@ int main(int argc, char *argv[]){
     //fin validacion
  semBlockCliente = sem_open("bloqueoCliente", O_CREAT, 0600, 1);
 
-//     int valorSem;
+    int valorSem;
        
-//  //
-//     sem_getvalue(semBlockCliente, &valorSem);
-//     if (!valorSem)
-//     {
-//         hayJugadorActivo();
-//         return 0;
-//     }
+ //
+    sem_getvalue(semBlockCliente, &valorSem);
+    if (!valorSem)
+    {
+        hayJugadorActivo();
+        return 0;
+    }
 
-//     sem_wait(semBlockCliente); //-->un solo cliente
+    sem_wait(semBlockCliente); //-->un solo cliente
 
 
     //configuracion de socket //
@@ -89,6 +89,7 @@ int main(int argc, char *argv[]){
         (struct sockaddr *)&socketConfig, sizeof(socketConfig));
 
         if(resultadoConexion < 0){
+              sem_post(semBlockCliente);
             cout << "Error en la conexxion" << endl;
             return EXIT_FAILURE;
         }
@@ -228,7 +229,7 @@ void mostrarPalabra(char * p){
 }
 
 void handlerSigInt(int sig ){
-
+       sem_post(semBlockCliente);
      sem_close(semBlockCliente);
     sem_unlink("bloqueoCliente");
   

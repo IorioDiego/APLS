@@ -1,11 +1,7 @@
--valdiar los enter en las letras y en las palabras
+-valdiar los enter en las letras y en las palabras(priodad MEDIA)
 
--hacer q solo pueda haber un cliente
+-que el cliente muestre el historial de letras(priodad BAJA)
 
--hacer q solo pueda haber un servidor
+-cuando se le hace crl c al jugador el sever se desconecta(rompe todo)->corregir (priodad ALTA)
 
--que el cliente muestre el historial de letras
-
--cuando se le hace crl c al jugador el sever se desconecta(rompe todo)->corregir
-
--hacer q sirva para mayusculas
+-hacer q sirva para mayusculas(priodad BAJA)

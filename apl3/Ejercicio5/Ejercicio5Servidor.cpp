@@ -73,15 +73,15 @@ int main(int argc, char *argv[]){
 
     semBlockServer = sem_open("bloqueoServer", O_CREAT, 0600, 1);
 
-    // int valorSem;
-    //  sem_getvalue(semBlockServer, &valorSem);
+    int valorSem;
+     sem_getvalue(semBlockServer, &valorSem);
 
-    //  if (!valorSem)
-    //  {
-    //      cout << "Error,El servidor ya ha sido iniciado" << endl;
-    //     return 0;
-    //  }
-    //  sem_wait(semBlockServer);
+     if (!valorSem)
+     {
+         cout << "Error,El servidor ya ha sido iniciado" << endl;
+        return 0;
+     }
+     sem_wait(semBlockServer);
 
 
 
@@ -156,6 +156,7 @@ int main(int argc, char *argv[]){
                 readBuff[bytesRecibidos] = 0;
                 mensaje = string(readBuff);
                   if(mensaje != "DESCONECTADO\r\n" ){
+               
                       cout << mensaje.size() << endl;
                 cout<< "letra recivida : " << mensaje << endl;
                 //FIN RECIVO LETRA O PALABRA
@@ -166,6 +167,8 @@ int main(int argc, char *argv[]){
                 write(socketComunicacion,sendBuff,strlen(sendBuff));
               
                     recorrerLisra(regLetras);
+                }else{
+                           sem_post(semBlockServer);
                 }
                 
                 //FIN comparo la letra o palabra //
